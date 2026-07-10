@@ -19,7 +19,7 @@
 
 
 
-uint32_t maskToPrefix(uint32_t subMaskBin){
+int maskToPrefix(uint32_t subMaskBin){
   int prefix = 0;
   for(int i = 31;i != 0;i--){
     uint32_t arrow = 1u << i;
