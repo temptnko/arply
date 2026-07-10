@@ -1,20 +1,20 @@
 
-#include <stdio.h>          // standard i/o: perror, printf, file, etc.
-#include <stdlib.h>         // general utilities: exit, malloc, free, atoi, strtol
-#include <string.h>         // string/memory helpers: memcpy, memset, strlen, strcmp
-#include <errno.h>          // handles errors
-#include <sys/types.h>      // system typedefs: ssize_t, pid_t, etc.
-#include <sys/socket.h>     // core socket apis/types: socket(), bind(), struct sockaddr
-#include <netinet/in.h>     // internet utilities: htons(), ntohs(), sockaddr_in (ip sockets)
-#include <linux/if_packet.h> // packet socket layer: af_packet, struct sockaddr_ll (raw link-layer sockets)
-#include <linux/if_ether.h>  // ethernet constants: eth_p_arp, eth_alen, eth_hlen
-#include <linux/if_arp.h>   // arp/hardware address types: arphrd_ether, arphrd_* constants
-#include <unistd.h> //close
-#include <net/if.h> // if_nametoindex
-#include <stdint.h> //uintx_t
-#include <arpa/inet.h> //htons
-//#include "scanlib.h"
-#include <ifaddrs.h> //getifaddress
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <linux/if_packet.h>
+#include <linux/if_ether.h>
+#include <linux/if_arp.h>
+#include <unistd.h>
+#include <net/if.h>
+#include <stdint.h>
+#include <arpa/inet.h> 
+#include "scanlib.h"
+#include <ifaddrs.h>
 
 
 
