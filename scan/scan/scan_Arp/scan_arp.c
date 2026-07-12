@@ -34,22 +34,23 @@ int maskToPrefix(uint32_t subMaskBin){
 int getWlan0Info(void){
   struct ifaddrs *ifaddr = NULL;
   struct ifaddrs *ifa = NULL;
-
   if(getifaddrs(&ifaddr) == -1){
     perror("getifaddrs");
     return -1;
   }
 
+  ifa = ifaddr;
   int foundSubMask = -1;
+
+  
   while(ifa){
     if(ifa->ifa_name && strcmp(ifa->ifa_name, "wlan0") == 0){
       struct sockaddr *takeOver = ifa->ifa_netmask;
       if(takeOver && takeOver->sa_family == AF_INET){
-        struct sockaddr_in *PtakeOver = (struct sockaddr *)takeOver;
-        struct in_addr freshSubMask = PtakeOver->sin_addr;
+        struct sockaddr_in *PtakeOver = (struct sockaddr_in *)ifa->ifa_netmask;
         
 
-        uint32_t rawSubMask = ntohl(freshSubMask.s_addr);
+        uint32_t rawSubMask = ntohl(PtakeOver->sin_addr.s_addr);
         foundSubMask = maskToPrefix(rawSubMask);
         break;
       }
@@ -60,10 +61,10 @@ int getWlan0Info(void){
   freeifaddrs(ifaddr);
 
   if(foundSubMask < 0){
-    perror("wlan0 not found");
     return -1;
   }else{
     return foundSubMask;
   }
 }
+
 
