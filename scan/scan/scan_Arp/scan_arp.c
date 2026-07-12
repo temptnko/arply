@@ -13,9 +13,10 @@
 
 
 
+
 int maskToPrefix(uint32_t subMaskBin){
   int prefix = 0;
-  for(int i = 31;i != 0;i--){
+  for(int i = 31;i >= 0;i--){
     uint32_t arrow = 1u << i;
     
     if((subMaskBin & arrow) == 0){
@@ -39,7 +40,7 @@ int getWlan0Info(void){
     return -1;
   }
 
-  int found = 0;
+  int foundSubMask = -1;
   while(ifa){
     if(ifa->ifa_name && strcmp(ifa->ifa_name, "wlan0") == 0){
       struct sockaddr *takeOver = ifa->ifa_netmask;
@@ -49,21 +50,20 @@ int getWlan0Info(void){
         
 
         uint32_t rawSubMask = ntohl(freshSubMask.s_addr);
-        int subMask = maskToPrefix(rawSubMask);
-        found = 1;
+        foundSubMask = maskToPrefix(rawSubMask);
         break;
       }
-
-
     }
     ifa = ifa->ifa_next;
   }
 
-
-  if(!found){
-    perror("wlan0 not found");
-  }
-
   freeifaddrs(ifaddr);
+
+  if(foundSubMask < 0){
+    perror("wlan0 not found");
+    return -1;
+  }else{
+    return foundSubMask;
+  }
 }
 
