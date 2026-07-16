@@ -14,7 +14,8 @@
 #include <stdint.h>
 #include <arpa/inet.h> 
 #include "sock_setup_Arp.h"
-#include <ifaddrs.h>
+
+
 
 
 int settupSocket(void){
