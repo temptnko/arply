@@ -9,7 +9,7 @@ extern "C" {
 
 int getWlan0Info(void);//checked: 1
 int maskToPrefix(uint32_t subMaskBin);//checked: 1
-
+int getCommandOutput(const char *command, char *buf, size_t bufSize);//checked: 1
 
 #ifdef __cplusplus
 }

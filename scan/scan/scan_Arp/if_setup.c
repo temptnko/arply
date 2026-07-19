@@ -7,12 +7,29 @@
 #include <arpa/inet.h>
 #include <ifaddrs.h>
 #include <net/if.h>
-#include "scan_arp.h"
+//#include "scan_arp.h"
+#include "if_setup.h"
 
-//#include "if_setup.h"
+//const char *command ="nmcli -t -f DEVICE,TYPE,STATE dev status | awk -F: '$2==\"wifi\" && $3==\"connected\"{print $1; exit}'";
+int getCommandOutput(const char *command, char *buf, size_t bufSize){
+  if(!command || !buf || bufSize == 0){
+    return -1;
+  }
+  buf[0] = '\0'; 
+  FILE *cmd = popen(command, "r");
+  if(!cmd)return -1;
 
+  if(!fgets(buf, bufSize, cmd)){
+    pclose(cmd);
+    buf[0] = '\0';
+    return -1;
+  }
+  
+  buf[strcspn(buf, "\r\n")] = '\0';
 
-
+  pclose(cmd);  
+  return 0;
+}
 
 int maskToPrefix(uint32_t subMaskBin){
   int prefix = 0;
@@ -27,8 +44,6 @@ int maskToPrefix(uint32_t subMaskBin){
   }
   return prefix;  
 }
-
-
 
 
 int getWlan0Info(void){
