@@ -46,7 +46,7 @@ int maskToPrefix(uint32_t subMaskBin){
 }
 
 
-int getWlan0Info(void){
+int getIfInfo(void){
   struct ifaddrs *ifaddr = NULL;
   struct ifaddrs *ifa = NULL;
   if(getifaddrs(&ifaddr) == -1){
