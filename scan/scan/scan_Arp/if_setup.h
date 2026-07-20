@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-int getWlan0Info(void);//checked: 1
+int getIfInfo(void);//checked: 1
 int maskToPrefix(uint32_t subMaskBin);//checked: 1
 int getCommandOutput(const char *command, char *buf, size_t bufSize);//checked: 1
 
