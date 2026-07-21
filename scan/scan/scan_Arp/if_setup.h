@@ -7,7 +7,8 @@
 extern "C" {
 #endif
 
-int getIfInfo(void);//checked: 1
+
+int getIfInfo(uint8_t *subMask, uint32_t *sourceIp, const char *ssid);
 int maskToPrefix(uint32_t subMaskBin);//checked: 1
 int getCommandOutput(const char *command, char *buf, size_t bufSize);//checked: 1
 

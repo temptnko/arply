@@ -21,8 +21,8 @@ struct EthernetFrame {
     uint8_t  plen;
     uint16_t oper;
     uint8_t  sha[6];
-    uint8_t  spa[4];
-    uint8_t  tha[6];
+    uint32_t  spa;
+    uint32_t  tha;
     uint8_t  tpa[4];
 };//checked: 1
 

@@ -10,6 +10,12 @@
 //#include "scan_arp.h"
 #include "if_setup.h"
 
+
+//uint8_t  sha[6];
+//uint8_t  spa[4];
+
+
+
 //const char *command ="nmcli -t -f DEVICE,TYPE,STATE dev status | awk -F: '$2==\"wifi\" && $3==\"connected\"{print $1; exit}'";
 int getCommandOutput(const char *command, char *buf, size_t bufSize){
   if(!command || !buf || bufSize == 0){
@@ -31,7 +37,7 @@ int getCommandOutput(const char *command, char *buf, size_t bufSize){
   return 0;
 }
 
-int maskToPrefix(uint32_t subMaskBin){
+uint8_t maskToPrefix(uint32_t subMaskBin){
   int prefix = 0;
   for(int i = 31;i >= 0;i--){
     uint32_t arrow = 1u << i;
@@ -45,8 +51,10 @@ int maskToPrefix(uint32_t subMaskBin){
   return prefix;  
 }
 
-
-int getIfInfo(void){
+int getIfInfo(uint8_t *subMask, uint32_t *sourceIp, const char *ssid){
+  if(!subMask || !sourceIp)return -1;
+  *subMask = 0;
+  *sourceIp = 0;
   struct ifaddrs *ifaddr = NULL;
   struct ifaddrs *ifa = NULL;
   if(getifaddrs(&ifaddr) == -1){
@@ -55,29 +63,28 @@ int getIfInfo(void){
   }
 
   ifa = ifaddr;
-  int foundSubMask = -1;
-
+  int status = 0;
   
   while(ifa){
-    if(ifa->ifa_name && strcmp(ifa->ifa_name, "wlan0") == 0){
-      struct sockaddr *takeOver = ifa->ifa_netmask;
-      if(takeOver && takeOver->sa_family == AF_INET){
-        struct sockaddr_in *PtakeOver = (struct sockaddr_in *)ifa->ifa_netmask;
+    if(ifa->ifa_name && strcmp(ifa->ifa_name, ssid) == 0){
+      if(ifa->ifa_netmask && ifa->ifa_netmask->sa_family == AF_INET){
+        struct sockaddr_in *Psub = (struct sockaddr_in *)ifa->ifa_netmask;
         
 
-        uint32_t rawSubMask = ntohl(PtakeOver->sin_addr.s_addr);
-        foundSubMask = maskToPrefix(rawSubMask);
-        break;
+        uint32_t rawSubMask = ntohl(Psub->sin_addr.s_addr);
+        *subMask = maskToPrefix(rawSubMask);
       }
+      if(ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET){
+        struct sockaddr_in *Pip = (struct sockaddr_in *)ifa->ifa_addr;
+        *sourceIp = ntohl(Pip->sin_addr.s_addr);
+      }
+      if(*sourceIp != 0 && *subMask != 0)break;
     }
     ifa = ifa->ifa_next;
   }
 
+  if(*subMask == 0)status -= 1;
+  if(*sourceIp == 0)status -= 2;
   freeifaddrs(ifaddr);
-
-  if(foundSubMask < 0){
-    return -1;
-  }else{
-    return foundSubMask;
-  }
+  return status;
 }
