@@ -12,8 +12,6 @@
 
 
 //uint8_t  sha[6];
-//uint8_t  spa[4];
-
 
 
 //const char *command ="nmcli -t -f DEVICE,TYPE,STATE dev status | awk -F: '$2==\"wifi\" && $3==\"connected\"{print $1; exit}'";
