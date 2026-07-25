@@ -48,7 +48,7 @@ int settupSocket(void){
     return packetSock;
 }
 
-struct EthernetFrame buildFrame(const uint8_t destination[6], const uint8_t source[6], const uint8_t sha[6], const uint8_t spa[4], const uint8_t tpa[4]){ 
+struct EthernetFrame buildFrame(const uint8_t destination[6], const uint8_t source[6], const uint8_t sha[6], const uint32_t spa, const uint32_t tpa){ 
   struct EthernetFrame frame = {0};
   struct EthernetFrame frame = {
     .type        = htons(ETH_P_ARP),
