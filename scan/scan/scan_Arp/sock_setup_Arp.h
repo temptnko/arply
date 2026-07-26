@@ -20,7 +20,7 @@ struct EthHeader {
 struct ArpHeader {
     uint16_t htype;
     uint16_t ptype;
-    
+ 
     uint8_t  hlen;
     uint8_t  plen;
 
