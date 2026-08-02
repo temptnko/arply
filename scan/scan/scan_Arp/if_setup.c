@@ -63,8 +63,7 @@ int getIfInfo(uint8_t *subMask, uint32_t *sourceIp, const char *ssid){
         struct sockaddr_in *Psub = (struct sockaddr_in *)ifa->ifa_netmask;
         
 
-        uint32_t rawSubMask = ntohl(Psub->sin_addr.s_addr);
-        *subMask = maskToPrefix(rawSubMask);
+        *subMask = ntohl(Psub->sin_addr.s_addr);
       }
       if(ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET){
         struct sockaddr_in *Pip = (struct sockaddr_in *)ifa->ifa_addr;
@@ -75,8 +74,8 @@ int getIfInfo(uint8_t *subMask, uint32_t *sourceIp, const char *ssid){
     ifa = ifa->ifa_next;
   }
 
-  if(*subMask == 0)status -= 1;
-  if(*sourceIp == 0)status -= 2;
+  if(*subMask == 0)status -= 2;
+  if(*sourceIp == 0)status -= 3;
   freeifaddrs(ifaddr);
   return status;
 }

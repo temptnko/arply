@@ -48,24 +48,28 @@ int settupSocket(void){
     return packetSock;
 }
 
-struct EthernetFrame buildFrame(const uint8_t destination[6], const uint8_t source[6], const uint8_t sha[6], const uint32_t spa, const uint32_t tpa){ 
+struct EthernetFrame buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa){ 
+  struct EthHeader eth = {0};
+  
+  eth.type = htons(ETH_P_ARP);
+  memcpy(eth.source, source, 6);
+  memcpy(eth.destination, "\xff\xff\xff\xff\xff\xff", 6);
+
+  struct ArpHeader arp = {0};
+
+  arp.htype = htons(1);
+  arp.ptype = htons(ETH_P_IP);
+  arp.hlen = 6;
+  arp.plen = 4;
+  arp.oper = htons(1);
+  arp.tha = {0, 0, 0, 0, 0, 0};
+  memcpy(arp.sha, source, 6);
+  arp.tpa = htonl(tpa);
+  arp.spa = htonl(spa);
+
   struct EthernetFrame frame = {0};
-  struct EthernetFrame frame = {
-    .type        = htons(ETH_P_ARP),
-
-    .htype       = htons(1),
-    .ptype       = htons(ETH_P_IP),
-    .hlen        = 6,
-    .plen        = 4,
-    .oper        = htons(1),
-    .tha         = {0, 0, 0, 0, 0, 0}
-  };
-
-  memcpy(frame.destination, destination, 6);
-  memcpy(frame.source, source, 6);
-  memcpy(frame.sha, sha, 6);
-  memcpy(frame.spa, spa, 4);//memcpy(struct of &x, struct or &y, sizeof(copied data)); copies data from y to x 
-  memcpy(frame.tpa, tpa, 4); 
+    frame.eth = eth;
+    frame.arp = arp;
 
   return frame; 
 }

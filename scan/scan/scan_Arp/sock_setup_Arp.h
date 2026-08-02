@@ -8,14 +8,14 @@
 extern "C" {
 #endif
 
-int settupSocket(void);//checked: 2
-struct EthernetFrame buildFrame(const uint8_t destination[6], const uint8_t source[6], const uint8_t sha[6], const uint32_t spa, const uint32_t tpa);//checked: 2 
+int settupSocket(void);
+struct EthernetFrame buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa); 
 
 struct EthHeader {
     uint8_t destination[6];
     uint8_t source[6];
     uint16_t type;
-};//checked: 3
+};
 
 struct ArpHeader {
     uint16_t htype;
@@ -30,12 +30,12 @@ struct ArpHeader {
     uint32_t  spa;
     uint8_t  tha[6];
     uint32_t  tpa;
-};//checked: 3
+};
 
 struct EthernetFrame {
-  struct EthHeader;
-  struct ArpHeader;
-};//checked: 3
+  struct EthHeader eth;
+  struct ArpHeader arp;
+};
 
 #ifdef __cplusplus
 }
