@@ -43,39 +43,3 @@ uint8_t maskToPrefix(uint32_t subMaskBin){
   return prefix;  
 }
 
-int getIfInfo(uint8_t *subMask, uint32_t *sourceIp, const char *ssid){
-  if(!subMask || !sourceIp)return -1;
-  *subMask = 0;
-  *sourceIp = 0;
-  struct ifaddrs *ifaddr = NULL;
-  struct ifaddrs *ifa = NULL;
-  if(getifaddrs(&ifaddr) == -1){
-    perror("getifaddrs");
-    return -1;
-  }
-
-  ifa = ifaddr;
-  int status = 0;
-  
-  while(ifa){
-    if(ifa->ifa_name && strcmp(ifa->ifa_name, ssid) == 0){
-      if(ifa->ifa_netmask && ifa->ifa_netmask->sa_family == AF_INET){
-        struct sockaddr_in *Psub = (struct sockaddr_in *)ifa->ifa_netmask;
-        
-
-        *subMask = ntohl(Psub->sin_addr.s_addr);
-      }
-      if(ifa->ifa_addr && ifa->ifa_addr->sa_family == AF_INET){
-        struct sockaddr_in *Pip = (struct sockaddr_in *)ifa->ifa_addr;
-        *sourceIp = ntohl(Pip->sin_addr.s_addr);
-      }
-      if(*sourceIp != 0 && *subMask != 0)break;
-    }
-    ifa = ifa->ifa_next;
-  }
-
-  if(*subMask == 0)status -= 2;
-  if(*sourceIp == 0)status -= 3;
-  freeifaddrs(ifaddr);
-  return status;
-}

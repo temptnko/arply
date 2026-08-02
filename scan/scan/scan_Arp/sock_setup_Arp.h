@@ -15,7 +15,7 @@ struct EthHeader {
     uint8_t destination[6];
     uint8_t source[6];
     uint16_t type;
-};
+} __attribute__((packed));
 
 struct ArpHeader {
     uint16_t htype;
@@ -30,12 +30,12 @@ struct ArpHeader {
     uint32_t  spa;
     uint8_t  tha[6];
     uint32_t  tpa;
-};
+} __attribute__((packed));
 
 struct EthernetFrame {
   struct EthHeader eth;
   struct ArpHeader arp;
-};
+} __attribute__((packed));
 
 #ifdef __cplusplus
 }

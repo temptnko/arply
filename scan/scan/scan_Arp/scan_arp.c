@@ -20,7 +20,7 @@ int main(){
 
   if(getCommandOutput(command, ssid, sizeof(ssid)) == -1)return -1;
   if(getSourceMac(ssid, sourceMac))return -1;
-  int retVal = getIfInfo(&subMaskInt, &sourceIp, ssid);
+  int retVal = getSourceInfo(ssid, sourceMac[6], &sourceIp, &subMaskBin);
   if(retVal < 0){
     return retVal;
   }
@@ -29,7 +29,7 @@ int main(){
 
 
   int limit = pow(2, 32 - subMaskInt);
-  //uint32_t targetIp = sourceIp & subMaskBin;
+  uint32_t targetIp = sourceIp & subMaskBin;
 
   for(int i = 1; i <= limit; i++){
     struct frame = buildFrame(sourceMac, sourceIp, targetIp + i);

@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-int getSourceMac(char *ssid, uint8_t sha[6]);
+int getSourceInfo(char *ssid, uint8_t sha[6], uint32_t *sourceIp, uint32_t *subMask);
 
 #ifdef __cplusplus
 }
