@@ -9,15 +9,23 @@
 #include <net/if.h>
 #include "if_setup.h"
 
-int getCommandOutput(const char *command, char *buf, size_t bufSize){
-  if(!command || !buf || bufSize == 0){
+int ifIndex(char *ssid){
+  int index = if_nametoindex(ssid);
+  if(index == 0){
+    return -1;
+  }
+  return index;
+}
+
+int getCommandOutput(const char *command, char *buf){
+  if(!command || !buf){
     return -1;
   }
   buf[0] = '\0'; 
   FILE *cmd = popen(command, "r");
   if(!cmd)return -1;
 
-  if(!fgets(buf, bufSize, cmd)){
+  if(!fgets(buf, sizeof(buf), cmd)){
     pclose(cmd);
     buf[0] = '\0';
     return -1;

@@ -13,8 +13,9 @@ int main(){
 
   uint8_t subMaskBin = 0;
   uint32_t sourceIp = 0;
+  struct sockaddr_ll socket_addr = {0}
 
-  int fdArp = settupSocket();
+  int fdArp = settupSocket(ssid, &socket_addr);
   
 
 
@@ -33,6 +34,11 @@ int main(){
 
   for(int i = 1; i <= limit; i++){
     struct frame = buildFrame(sourceMac, sourceIp, targetIp + i);
+    ssize_t bytesSent = sendto(fdArp, &frame, sizeof(frame), 0, (struct sockaddr*)&socket_addr, sizeof(socket_addr);
+    if(bytesSent < 0){
+      perror("sendto failed");
+      return -1;
+    }
   }
   
 

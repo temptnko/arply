@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,34 +14,10 @@
 #include <arpa/inet.h> 
 #include "sock_setup_Arp.h"
 
-
-
-
-int settupSocket(void){
+int settupSocket(){
     int packetSock = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
     if(packetSock < 0){
         perror("socket");
-        return -1;
-    }
-
-    struct sockaddr_ll sll = {0};
-    sll.sll_family = AF_PACKET;
-    sll.sll_protocol = htons(ETH_P_ARP);
-    sll.sll_ifindex = if_nametoindex("wlan0");
-    if(sll.sll_ifindex == 0){
-        perror("if_nametoindex");
-        close(packetSock);
-        return -1;
-    }
-    sll.sll_hatype = ARPHRD_ETHER;
-    sll.sll_pkttype = 0;
-    sll.sll_halen = ETH_ALEN;
-    memcpy(sll.sll_addr, "\xff\xff\xff\xff\xff\xff", 6);
-    socklen_t addrlen = sizeof(struct sockaddr_ll);
-
-    if(bind(packetSock, &sll, addrlen) == -1){
-        perror("bind");
-        close(packetSock);
         return -1;
     }
     return packetSock;
