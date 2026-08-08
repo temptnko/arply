@@ -9,8 +9,12 @@
 extern "C" {
 #endif
 
+#define ARP_REQUEST 1
+#define ARP_REPLY 2
+
+
 int settupSocket(void);
-struct EthernetFrame buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa); 
+struct arp_packet buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa); 
 int parseResponse(uint8_t *buffer, uint32_t sourceIp);
 
 /*struct ethhdr {
@@ -18,9 +22,9 @@ int parseResponse(uint8_t *buffer, uint32_t sourceIp);
   uint8_t source[6];
   uint16_t type;
 } __attribute__((packed));
+*/
 
-
-struct arp_hdr {
+struct arphdr {
     uint16_t htype;
     uint16_t ptype;
  
@@ -36,9 +40,9 @@ struct arp_hdr {
 
 struct arp_packet {
   struct ethhdr eth;
-  struct arp_hdr arp;
+  struct arphdr arp;
 } __attribute__((packed));
-*/
+
 
 #ifdef __cplusplus
 }
