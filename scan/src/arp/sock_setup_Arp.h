@@ -3,6 +3,7 @@
 #define SOCK_SETUP_H
 
 #include <stdint.h>
+#include <net/ethernet.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -10,14 +11,16 @@ extern "C" {
 
 int settupSocket(void);
 struct EthernetFrame buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa); 
+int parseResponse(uint8_t *buffer, uint32_t sourceIp);
 
-struct EthHeader {
-    uint8_t destination[6];
-    uint8_t source[6];
-    uint16_t type;
+/*struct ethhdr {
+  uint8_t destination[6];
+  uint8_t source[6];
+  uint16_t type;
 } __attribute__((packed));
 
-struct ArpHeader {
+
+struct arp_hdr {
     uint16_t htype;
     uint16_t ptype;
  
@@ -25,17 +28,17 @@ struct ArpHeader {
     uint8_t  plen;
 
     uint16_t oper;
-
     uint8_t  sha[6];
     uint32_t  spa;
     uint8_t  tha[6];
     uint32_t  tpa;
 } __attribute__((packed));
 
-struct EthernetFrame {
-  struct EthHeader eth;
-  struct ArpHeader arp;
+struct arp_packet {
+  struct ethhdr eth;
+  struct arp_hdr arp;
 } __attribute__((packed));
+*/
 
 #ifdef __cplusplus
 }
