@@ -9,9 +9,10 @@
 #include <net/if.h>
 #include "if_setup.h"
 
-int ifIndex(char *ssid){
-  int index = if_nametoindex(ssid);
+int getIfIndex(char *ifName){
+  int index = if_nametoindex(ifName);
   if(index == 0){
+    perror("if_nametoindex");
     return -1;
   }
   return index;

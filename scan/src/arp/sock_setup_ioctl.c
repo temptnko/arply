@@ -9,7 +9,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
-int getSourceInfo(char *ssid, uint8_t sha[6], uint32_t *sourceIp, uint32_t *subMask){
+int getSourceInfo(char *ifName, uint8_t sha[6], uint32_t *sourceIp, uint32_t *subMask){
   int fd = socket(AF_INET, SOCK_DGRAM, 0);
   if(fd == -1){
     perror("socket");
@@ -17,7 +17,7 @@ int getSourceInfo(char *ssid, uint8_t sha[6], uint32_t *sourceIp, uint32_t *subM
   }
   struct ifreq ifr = {0};
 
-  strncpy(ifr.ifr_name, ssid, IFNAMSIZ - 1);
+  strncpy(ifr.ifr_name, ifName, IFNAMSIZ - 1);
   ifr.ifr_name[IFNAMSIZ - 1] = '\0';
 
   if(ioctl(fd, SIOCGIFHWADDR, &ifr) < 0){

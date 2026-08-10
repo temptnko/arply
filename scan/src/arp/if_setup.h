@@ -10,7 +10,7 @@ extern "C" {
 
 uint8_t maskToPrefix(uint32_t subMaskBin);
 int getCommandOutput(const char *command, char *buf);
-int ifIndex(char *ssid);
+int getIfIndex(char *ifName);
 
 #ifdef __cplusplus
 }

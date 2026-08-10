@@ -11,7 +11,7 @@ extern "C" {
 
 #define ARP_REQUEST 1
 #define ARP_REPLY 2
-
+#define ARPHRD_ETHER 1
 
 int settupSocket(void);
 struct arp_packet buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa); 
