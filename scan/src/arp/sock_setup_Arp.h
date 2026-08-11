@@ -14,7 +14,7 @@ extern "C" {
 #define ARPHRD_ETHER 1
 
 int settupSocket(void);
-struct arp_packet buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa); 
+struct arp_packet buildFrame(uint8_t source[6], uint32_t spa, uint32_t tpa); 
 int parseResponse(uint8_t *buffer, uint32_t sourceIp);
 
 /*struct ethhdr {

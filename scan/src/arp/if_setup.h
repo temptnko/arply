@@ -8,7 +8,6 @@ extern "C" {
 #endif
 
 
-uint8_t maskToPrefix(uint32_t subMaskBin);
 int getCommandOutput(const char *command, char *buf);
 int getIfIndex(char *ifName);
 

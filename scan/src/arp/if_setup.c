@@ -38,17 +38,4 @@ int getCommandOutput(const char *command, char *buf){
   return 0;
 }
 
-uint8_t maskToPrefix(uint32_t subMaskBin){
-  int prefix = 0;
-  for(int i = 31;i >= 0;i--){
-    uint32_t arrow = 1u << i;
-    
-    if((subMaskBin & arrow) == 0){
-      break;
-    }else{
-      prefix += 1;
-    }
-  }
-  return prefix;  
-}
 

@@ -31,12 +31,11 @@ int main(){
   if(retVal < 0){
     return retVal;
   }
-  uint8_t subMaskInt = maskToPrefix(subMaskBin);
   if(fdArp == -1)return 3;
 
 
-  int limit = pow(2, 32 - subMaskInt);
-  uint32_t targetIp = sourceIp & subMaskBin;
+  uint32_t network = sourceIp & subMaskBin;
+  uint32_t broadcast = network | ~subMaskBin;
 
   
   socket_addr.sll_family = ARPHRD_ETHER;
@@ -45,13 +44,16 @@ int main(){
   memset(socket_addr.sll_addr, 0xff, 6);
 
   uint8_t buffer[4096] = {0};
-  for(int i = 1; i <= limit; i++){
-    struct arp_packet frame = buildFrame(sourceMac, sourceIp, targetIp + i);
+  for(uint32_t ip = network + 1; ip < broadcast; ip++){
+    struct arp_packet frame = buildFrame(sourceMac, sourceIp, ip);
     ssize_t bytesSent = sendto(fdArp, &frame, sizeof(frame), 0, (struct sockaddr*)&socket_addr, sizeof(socket_addr));
     if(bytesSent <= 0){
       perror("sendto failed");
       return 4;
     }
+
+    printf("sent to: %u\n", ip);
+    
     ssize_t bytesRecv = recvfrom(fdArp, buffer, sizeof(buffer), 0, NULL, NULL);
     if(bytesRecv <= 0){
       perror("recvfrom failed");

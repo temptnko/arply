@@ -31,7 +31,7 @@ int settupSocket(){
     return packetSock;
 }
 
-struct arp_packet buildFrame(const uint8_t source[6], const uint32_t spa, const uint32_t tpa){ 
+struct arp_packet buildFrame(uint8_t source[6], uint32_t spa, uint32_t tpa){ 
   struct ethhdr eth = {0};
   
   eth.h_proto = htons(ETH_P_ARP);
