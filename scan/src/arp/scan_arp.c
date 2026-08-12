@@ -10,6 +10,8 @@
 #include <linux/if_packet.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 int main(){
   const char command[] ="nmcli -t -f DEVICE,TYPE,STATE dev status | awk -F: '$2==\"wifi\" && $3==\"connected\"{print $1; exit}'";
@@ -45,14 +47,17 @@ int main(){
 
   uint8_t buffer[4096] = {0};
   for(uint32_t ip = network + 1; ip < broadcast; ip++){
+    if(ip == sourceIp)continue;
     struct arp_packet frame = buildFrame(sourceMac, sourceIp, ip);
     ssize_t bytesSent = sendto(fdArp, &frame, sizeof(frame), 0, (struct sockaddr*)&socket_addr, sizeof(socket_addr));
     if(bytesSent <= 0){
       perror("sendto failed");
       return 4;
     }
+    struct in_addr a = {0};
+    a.s_addr = htonl(ip);
 
-    printf("sent to: %u\n", ip);
+    printf("sent to: %s\n", inet_ntoa(a));
     
     ssize_t bytesRecv = recvfrom(fdArp, buffer, sizeof(buffer), 0, NULL, NULL);
     if(bytesRecv <= 0){
