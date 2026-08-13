@@ -1,7 +1,7 @@
 #include <arpa/inet.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "sock_setup_Arp.h"
+#include "include/arp/sock_setup_Arp.h"
 
 int parseResponse(uint8_t *buffer, uint32_t sourceIp){
   struct arp_packet *arp_reply = (struct arp_packet*)buffer;

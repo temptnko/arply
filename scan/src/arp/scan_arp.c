@@ -1,6 +1,6 @@
-#include "if_setup.h"
-#include "sock_setup_Arp.h"
-#include "sock_setup_ioctl.h"
+#include "include/arp/if_setup.h"
+#include "include/arp/sock_setup_Arp.h"
+#include "include/arp/sock_setup_ioctl.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -13,7 +13,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int main(){
+int scanArp(){
   const char command[] ="nmcli -t -f DEVICE,TYPE,STATE dev status | awk -F: '$2==\"wifi\" && $3==\"connected\"{print $1; exit}'";
 
   char ifName[64] = {0};

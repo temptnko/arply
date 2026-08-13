@@ -1,26 +1,9 @@
-/*
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/ether.h>
-#include <net/if_arp.h>
-#include <linux/if_packet.h>
-#include <linux/if_ether.h>
-#include <linux/if_arp.h>
-#include <unistd.h>
-#include <stdint.h>
-#include <arpa/inet.h> 
-*/
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include "sock_setup_Arp.h"
+#include "include/arp/sock_setup_Arp.h"
 
 int settupSocket(){
     int packetSock = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));
