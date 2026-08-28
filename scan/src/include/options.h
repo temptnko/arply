@@ -13,7 +13,7 @@ extern "C" {
     uint8_t recursive;
     uint8_t mac;
     uint8_t output;
-    const char *file
+    const char *file;
   } options_t;
 
 

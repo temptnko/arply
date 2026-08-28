@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <getopt.h>
-#include "include/arp/scanArp"
-#include "include/options.h"
+#include "arp/scan_arp.h"
+#include "options.h"
 
 void printError(char *error){
   printf("%s\n", error);
@@ -10,7 +10,7 @@ void printError(char *error){
 
 void printUsage(void){
   fprintf(stderr,
-          "Usage: arply [protocol(s)] [flags]\n"
+          "Usage: arply [flags]\n"
           "Protocols:\n"
           "  -a, --arp                     ARP protocol (host discovery + mac addr find)\n"
           "Flags:\n"
@@ -20,7 +20,7 @@ void printUsage(void){
           "  -o <file>, --output <file>    specify a output destination file\n");
 }
 
-static struct options longOptions[] = {
+static struct option longOptions[] = {
   {"help", no_argument, 0, 'h'},
   {"arp", no_argument, 0, 'a'},
   {"recursive", no_argument, 0, 'r'},
@@ -30,9 +30,9 @@ static struct options longOptions[] = {
 };
 
 
-int main(int agrc, char *argv[]){
+int main(int argc, char *argv[]){
   int optionVal;
-  struct options_t options = {0};
+  options_t options = {0};
 
   while((optionVal = getopt_long(argc, argv, "harmo:", longOptions, NULL)) != -1){
     switch (optionVal) {

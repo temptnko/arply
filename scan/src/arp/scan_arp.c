@@ -1,6 +1,7 @@
-#include "include/arp/if_setup.h"
-#include "include/arp/sock_setup_Arp.h"
-#include "include/arp/sock_setup_ioctl.h"
+#include "arp/if_setup.h"
+#include "arp/sock_setup_arp.h"
+#include "arp/sock_setup_ioctl.h"
+#include "options.h"
 
 #include <stdio.h>
 #include <stdint.h>
@@ -13,7 +14,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-int scanArp(){
+int scanArp(const options_t *options){
   const char command[] ="nmcli -t -f DEVICE,TYPE,STATE dev status | awk -F: '$2==\"wifi\" && $3==\"connected\"{print $1; exit}'";
 
   char ifName[64] = {0};
@@ -57,8 +58,10 @@ int scanArp(){
     struct in_addr a = {0};
     a.s_addr = htonl(ip);
 
-    printf("sent to: %s\n", inet_ntoa(a));
-    
+    if(options->recursive == 1){
+      printf("sent to: %s\n", inet_ntoa(a));
+    }
+
     ssize_t bytesRecv = recvfrom(fdArp, buffer, sizeof(buffer), 0, NULL, NULL);
     if(bytesRecv <= 0){
       perror("recvfrom failed");

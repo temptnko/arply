@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
-#include "include/arp/sock_setup_Arp.h"
+#include "arp/sock_setup_arp.h"
 
 int settupSocket(){
     int packetSock = socket(AF_PACKET, SOCK_RAW, htons(ETH_P_ARP));

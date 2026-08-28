@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #include <ifaddrs.h>
 #include <net/if.h>
-#include "include/arp/if_setup.h"
+#include "arp/if_setup.h"
 
 int getIfIndex(char *ifName){
   int index = if_nametoindex(ifName);
