@@ -15,7 +15,7 @@ extern "C" {
 
 int settupSocket(void);
 struct arp_packet buildFrame(uint8_t source[6], uint32_t spa, uint32_t tpa); 
-int parseResponse(uint8_t *buffer, uint32_t sourceIp);
+int parseResponse(uint8_t *buffer, uint32_t sourceIp, uint32_t targetIp, uint8_t mac);
 
 /*struct ethhdr {
   uint8_t destination[6];

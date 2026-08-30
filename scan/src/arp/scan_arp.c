@@ -6,13 +6,26 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
+#include <errno.h>
 #include <math.h>
+#include <time.h>
+#include <poll.h>
 #include <stddef.h>
 #include <linux/if_packet.h>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+
+long long nowMs(void){
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+
+  long long sec = (long long)ts.tv_sec * 1000LL;
+  long long ms = ts.tv_nsec / 1000000LL;
+
+  return sec + ms;
+}
 
 int scanArp(const options_t *options){
   const char command[] ="nmcli -t -f DEVICE,TYPE,STATE dev status | awk -F: '$2==\"wifi\" && $3==\"connected\"{print $1; exit}'";
@@ -61,14 +74,47 @@ int scanArp(const options_t *options){
     if(options->recursive == 1){
       printf("sent to: %s\n", inet_ntoa(a));
     }
+    long long deadline = nowMs() + 1000;
+    while(1){
+      long long timeLeft = deadline - nowMs();
+      if(timeLeft <= 0){
+        break;
+      }
 
-    ssize_t bytesRecv = recvfrom(fdArp, buffer, sizeof(buffer), 0, NULL, NULL);
-    if(bytesRecv <= 0){
-      perror("recvfrom failed");
-      return 5;
-    }
-    if(parseResponse(buffer, sourceIp) == -1){
-      continue;
+      struct pollfd pfd = {0};
+      pfd.fd = fdArp;
+      pfd.events = POLLIN;
+
+      int ready = poll(&pfd, 1, (int)timeLeft);
+      if(ready < 0){
+        if(errno == EINTR){
+          continue;
+        }else{
+          perror("poll failed");
+          return 5;
+        }
+      }
+      if(ready == 0)break;
+      if(pfd.revents & (POLLERR | POLLHUP | POLLNVAL)){
+        fprintf(stderr, "poll reported error");
+        return 6;
+      }
+
+      if(pfd.revents & POLLIN){
+        ssize_t bytesRecv = recvfrom(fdArp, buffer, sizeof(buffer), 0, NULL, NULL);
+        if(bytesRecv < 0){
+          if(errno == EINTR){
+            continue;
+          }else{
+            perror("recvfrom failed");
+            return 7;
+          }
+        }
+        if(parseResponse(buffer, sourceIp, ip, options->mac) == -1){
+          continue;
+        }
+        break;
+      }
     }
   }
   return 0;

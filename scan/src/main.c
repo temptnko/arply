@@ -5,7 +5,7 @@
 
 void printError(char *error){
   printf("%s\n", error);
-  printf("For help use -h or --help flag");
+  printf("For help use -h or --help flag\n");
 }
 
 void printUsage(void){
