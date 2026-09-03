@@ -74,7 +74,7 @@ int scanArp(const options_t *options){
     if(options->recursive == 1){
       printf("sent to: %s\n", inet_ntoa(a));
     }
-    long long deadline = nowMs() + 1000;
+    long long deadline = nowMs() + 500;
     while(1){
       long long timeLeft = deadline - nowMs();
       if(timeLeft <= 0){
@@ -110,7 +110,7 @@ int scanArp(const options_t *options){
             return 7;
           }
         }
-        if(parseResponse(buffer, sourceIp, ip, options->mac) == -1){
+        if(parseResponse(buffer, sourceIp, ip, options->mac, options->output, options->file) == -1){
           continue;
         }
         break;
